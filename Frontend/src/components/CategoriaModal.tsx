@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { Categoria, CategoriaForm } from '../types/categoria'
 
 interface CategoriaModalProps {
@@ -14,19 +14,11 @@ function CategoriaModal({
   onCerrar,
   onSubmit,
 }: CategoriaModalProps) {
-  const [nombre, setNombre] = useState('')
-  const [descripcion, setDescripcion] = useState('')
+  const [nombre, setNombre] = useState(categoria?.nombre ?? '')
+  const [descripcion, setDescripcion] = useState(
+    categoria?.descripcion ?? '',
+  )
   const [guardando, setGuardando] = useState(false)
-
-  useEffect(() => {
-    if (categoria) {
-      setNombre(categoria.nombre)
-      setDescripcion(categoria.descripcion)
-    } else {
-      setNombre('')
-      setDescripcion('')
-    }
-  }, [categoria, abierto])
 
   if (!abierto) {
     return null

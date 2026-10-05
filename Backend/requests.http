@@ -148,6 +148,14 @@ Content-Type: application/json
   "categoria_id": 1
 }
 
+### Actualizar relacion Producto-Categoria
+PUT {{baseUrl}}/productos/categorias/1/1
+Content-Type: application/json
+
+{
+  "nuevo_producto_id": 1,
+  "nueva_categoria_id": 1
+}
 
 ### Eliminar relacion Producto 1 - Categoria 1
 DELETE {{baseUrl}}/productos/categorias/1/1

@@ -4,12 +4,14 @@ from sqlmodel import Session
 from app.core.database import get_session
 from app.producto.schema import (
     ProductoCategoriaCreate,
+    ProductoCategoriaUpdate,
     ProductoCreate,
     ProductoRead,
     ProductoUpdate,
 )
 from app.producto.service import (
     actualizar_producto,
+    actualizar_relacion,
     asociar_categoria,
     crear_producto,
     eliminar_producto,
@@ -149,3 +151,38 @@ def quitar_categoria_de_producto(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Relacion no encontrada",
         )
+
+@router.put("/categorias/{producto_id}/{categoria_id}")
+def modificar_relacion(
+    datos: ProductoCategoriaUpdate,
+    producto_id: int = Path(gt=0),
+    categoria_id: int = Path(gt=0),
+    session: Session = Depends(get_session),
+):
+    resultado = actualizar_relacion(
+        producto_id,
+        categoria_id,
+        datos.nuevo_producto_id,
+        datos.nueva_categoria_id,
+        session,
+    )
+
+    if resultado == "relacion_no_encontrada":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Relacion Producto-Categoria no encontrada",
+        )
+
+    if resultado == "recurso_no_encontrado":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Producto o categoria no encontrado",
+        )
+
+    if resultado == "relacion_duplicada":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="La relacion Producto-Categoria ya existe",
+        )
+
+    return resultado

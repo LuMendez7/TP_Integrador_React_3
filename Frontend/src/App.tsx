@@ -35,7 +35,40 @@ function App() {
   }
 
   useEffect(() => {
-    cargarCategorias()
+    let activo = true
+
+    const obtenerCategorias = async () => {
+      try {
+        const respuesta = await fetch(`${API_URL}/`)
+
+        if (!respuesta.ok) {
+          throw new Error('No se pudieron obtener las categorías')
+        }
+
+        const datos: Categoria[] = await respuesta.json()
+
+        if (activo) {
+          setCategorias(datos)
+          setError('')
+        }
+      } catch (error) {
+        console.error(error)
+
+        if (activo) {
+          setError('No se pudo conectar con el servidor.')
+        }
+      } finally {
+        if (activo) {
+          setCargando(false)
+        }
+      }
+    }
+
+    void obtenerCategorias()
+
+    return () => {
+      activo = false
+    }
   }, [])
 
   const abrirModalCrear = () => {
@@ -153,12 +186,15 @@ function App() {
         )}
       </main>
 
-      <CategoriaModal
-        abierto={modalAbierto}
-        categoria={categoriaSeleccionada}
-        onCerrar={cerrarModal}
-        onSubmit={guardarCategoria}
-      />
+      {modalAbierto && (
+        <CategoriaModal
+          key={categoriaSeleccionada?.id ?? 'nueva'}
+          abierto={modalAbierto}
+          categoria={categoriaSeleccionada}
+          onCerrar={cerrarModal}
+          onSubmit={guardarCategoria}
+        />
+      )}
     </div>
   )
 }

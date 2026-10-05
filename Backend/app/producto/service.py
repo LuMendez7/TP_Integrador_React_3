@@ -113,3 +113,48 @@ def eliminar_relacion(
     session.commit()
 
     return True
+
+def actualizar_relacion(
+    producto_id: int,
+    categoria_id: int,
+    nuevo_producto_id: int,
+    nueva_categoria_id: int,
+    session: Session,
+):
+    statement = select(ProductoCategoria).where(
+        ProductoCategoria.producto_id == producto_id,
+        ProductoCategoria.categoria_id == categoria_id,
+    )
+
+    relacion = session.exec(statement).first()
+
+    if relacion is None:
+        return "relacion_no_encontrada"
+
+    nuevo_producto = session.get(Producto, nuevo_producto_id)
+    nueva_categoria = session.get(Categoria, nueva_categoria_id)
+
+    if nuevo_producto is None or nueva_categoria is None:
+        return "recurso_no_encontrado"
+
+    statement_existente = select(ProductoCategoria).where(
+        ProductoCategoria.producto_id == nuevo_producto_id,
+        ProductoCategoria.categoria_id == nueva_categoria_id,
+    )
+
+    relacion_existente = session.exec(statement_existente).first()
+
+    if relacion_existente and (
+        nuevo_producto_id != producto_id
+        or nueva_categoria_id != categoria_id
+    ):
+        return "relacion_duplicada"
+
+    relacion.producto_id = nuevo_producto_id
+    relacion.categoria_id = nueva_categoria_id
+
+    session.add(relacion)
+    session.commit()
+    session.refresh(relacion)
+
+    return relacion
