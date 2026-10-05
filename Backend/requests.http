@@ -1,0 +1,153 @@
+### =====================================================
+### TP INTEGRADOR REACT 3
+### Pruebas Backend
+### =====================================================
+
+@baseUrl = http://127.0.0.1:8000
+
+
+### =====================================================
+### CATEGORIAS
+### =====================================================
+
+### Listar categorias
+GET {{baseUrl}}/categorias/
+
+
+### Crear categoria 1
+POST {{baseUrl}}/categorias/
+Content-Type: application/json
+
+{
+  "nombre": "Tecnologia",
+  "descripcion": "Productos relacionados con tecnologia"
+}
+
+
+### Crear categoria 2
+POST {{baseUrl}}/categorias/
+Content-Type: application/json
+
+{
+  "nombre": "Hogar",
+  "descripcion": "Productos para el hogar"
+}
+
+
+### Buscar categoria por ID
+GET {{baseUrl}}/categorias/1
+
+
+### Actualizar categoria
+PUT {{baseUrl}}/categorias/1
+Content-Type: application/json
+
+{
+  "nombre": "Tecnologia e Informatica",
+  "descripcion": "Productos tecnologicos e informaticos"
+}
+
+
+### =====================================================
+### PRODUCTOS
+### =====================================================
+
+### Listar productos
+GET {{baseUrl}}/productos/
+
+
+### Crear producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Notebook",
+  "descripcion": "Notebook para uso personal",
+  "precio_base": "850000",
+  "imagen_url": [
+    "https://ejemplo.com/notebook.jpg"
+  ],
+  "disponible": true
+}
+
+
+### Crear segundo producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Teclado",
+  "descripcion": "Teclado USB",
+  "precio_base": "25000",
+  "imagen_url": [
+    "https://ejemplo.com/teclado.jpg"
+  ],
+  "disponible": true
+}
+
+
+### Buscar producto por ID
+GET {{baseUrl}}/productos/1
+
+
+### Actualizar producto
+PUT {{baseUrl}}/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Notebook Gamer",
+  "descripcion": "Notebook para juegos y uso personal",
+  "precio_base": "950000",
+  "imagen_url": [
+    "https://ejemplo.com/notebook-gamer.jpg"
+  ],
+  "disponible": true
+}
+
+
+### =====================================================
+### PRODUCTO - CATEGORIA
+### =====================================================
+
+### Asociar producto 1 con categoria 1
+POST {{baseUrl}}/productos/categorias/asociar
+Content-Type: application/json
+
+{
+  "producto_id": 1,
+  "categoria_id": 1
+}
+
+
+### =====================================================
+### DELETE - USAR AL FINAL
+### =====================================================
+
+### Eliminar producto
+DELETE {{baseUrl}}/productos/2
+
+
+### Eliminar categoria
+DELETE {{baseUrl}}/categorias/2
+
+### =====================================================
+### PRODUCTO - CATEGORIA
+### PRUEBAS DE RELACION
+### =====================================================
+
+### Listar relaciones Producto-Categoria
+GET {{baseUrl}}/productos/categorias/relaciones
+
+
+### Asociar Producto 1 con Categoria 1
+POST {{baseUrl}}/productos/categorias/asociar
+Content-Type: application/json
+
+{
+  "producto_id": 1,
+  "categoria_id": 1
+}
+
+
+### Eliminar relacion Producto 1 - Categoria 1
+DELETE {{baseUrl}}/productos/categorias/1/1
